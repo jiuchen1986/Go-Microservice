@@ -8,10 +8,13 @@ import (
     "errors"
     "strings"
     "time"
-    
-    "github.com/jiuchen1986/Go-Microservice/app"
-    "github.com/jiuchen1986/Go-Microservice/types"
-    "github.com/jiuchen1986/Go-Microservice/utils"
+
+    "app"
+    "types"
+    "utils"    
+//    "github.com/jiuchen1986/Go-Microservice/app"
+//    "github.com/jiuchen1986/Go-Microservice/types"
+//    "github.com/jiuchen1986/Go-Microservice/utils"
 )
 
 type LocalServiceHandler struct {   // the handler processing the requests for the local service
@@ -23,6 +26,7 @@ func NewLocalServiceHandler(ctx *app.LocalServiceTestServiceContext) (h *LocalSe
 }
 
 func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main requests process of the handler
+    fmt.Println("Delay for ", delay)
     time.Sleep(delay)
     
     req_header := h.Ctx.RequestData.Request.Header

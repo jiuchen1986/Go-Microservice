@@ -3,9 +3,10 @@
 package main
 
 import (
-    "flags"
+    "flag"
     
-    "github.com/jiuchen1986/Go-Microservice/app"
+    "app"    
+//    "github.com/jiuchen1986/Go-Microservice/app"
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware"
 )
@@ -23,6 +24,7 @@ func init() {
 
 func main() {
 	flag.Parse()
+    delay = delay * 1000000
     // Create service
 	service := goa.New("TEST REST API")
 

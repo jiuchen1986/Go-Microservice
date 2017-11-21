@@ -10,9 +10,12 @@ import (
     "strconv"
     "time"
     
-    "github.com/jiuchen1986/Go-Microservice/app"
-    "github.com/jiuchen1986/Go-Microservice/types"
-    "github.com/jiuchen1986/Go-Microservice/utils"
+    "app"
+    "types"
+    "utils"
+//    "github.com/jiuchen1986/Go-Microservice/app"
+//    "github.com/jiuchen1986/Go-Microservice/types"
+//   "github.com/jiuchen1986/Go-Microservice/utils"
 )
 
 var trace_header = [...]string{"X-Request-Id",
@@ -33,6 +36,7 @@ func NewServiceChainHandler(ctx *app.ServiceChainTestServiceContext) (h *Service
 }
 
 func (h *ServiceChainHandler) Process(delay time.Duration) error {  // the main requests process of the handler
+    fmt.Println("Delay for ", delay)
     time.Sleep(delay)
     
     cha, er := GetLocalServiceStatus()

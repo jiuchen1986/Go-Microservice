@@ -7,9 +7,9 @@ import (
     "encoding/json"
     "fmt"
     "strconv"
-    
-    "github.com/jiuchen1986/Go-Microservice/utils"
-    
+
+    "utils"    
+//    "github.com/jiuchen1986/Go-Microservice/utils"    
     "github.com/tidwall/gjson"
 )
 

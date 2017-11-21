@@ -5,8 +5,9 @@ package handler
 import (
     "errors"
     "time"
-    
-    "github.com/jiuchen1986/Go-Microservice/app"
+
+    "app"    
+//    "github.com/jiuchen1986/Go-Microservice/app"
 )
 
 type ITestServiceContext interface {   // an interface for the contexts defined in the app/context.go for the test service
