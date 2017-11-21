@@ -17,37 +17,26 @@ type ServiceStatus struct {  // The service status of the local service
     Order string `json:"order"`  // The order of the local service from the end of the service chain
     ServName string `json:"service"`  // The name of the local service
     Version string `json:"version"`  // The version of the local service
+    SubChain int `json:"subchain,omitempty"` // A sub service chain from the local service
+}
+
+type ServiceChain struct {  // A service chain
+     Starter string `json:"starter"`  // The name of the starting service of this chain
+     ChainId int `json:"id"` // A chain id unique in a service
+     Chain []*ServiceStatus `json:"chain"` // The status of the services from the local service to the end of the service chain
+     MainChain bool `json:"main"`
+     Len string `json:"length"`  // The length of the test services from the local service to the end of the service chain
 }
 
 type TestServiceResponse struct {   // The response body structure used between test services
-    Len string `json:"length"`  // The length of the test services from the local service to the end of the service chain
-    Chain []*ServiceStatus `json:"chain"` // The status of the services from the local service to the end of the service chain
+    Chains []*ServiceChain `json:"chains"` // The chains, include the sub chains, involved in this call
 }
 
 func RespEncode(r *TestServiceResponse) (b []byte, err error) {  // Encode a response structure to a response body
     return json.Marshal(r)
 }
 
-func RespDecode(b []byte) (r *TestServiceResponse, err error) {  // Decode a response body to a response structure
-    /*
-    var dat map[string]interface{}
-    
-    if err := json.Unmarshal(b, &dat); err != nil {
-        return nil, err
-    }
-    
-    l = dat["length"].(int)
-    c = dat["chain"].([]interface{})
-    cha := make([]*ServiceStatus, len(c))
-    for i, s := range c {
-        if st, ok := s.(ServiceStatus); ok {
-            cha[i] = &st
-        }
-    }
-    
-    return &TestServiceResponse{l, cha}, nil
-    */
-    
+func RespDecode(b []byte) (r *TestServiceResponse, err error) {  // Decode a response body to a response structure    
     json_str := utils.Convert(b)
     fmt.Println("Get a response: ", json_str)
     l := gjson.Get(json_str, "length").String()    
