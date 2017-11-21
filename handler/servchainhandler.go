@@ -14,13 +14,13 @@ import (
     "utils"
 )
 
-var trace_header = [...]string{"x-request-id",
-                               "x-b3-traceid",
-                               "x-b3-spanid",
-                               "x-b3-parentspanid",
-                               "x-b3-sampled",
-                               "x-b3-flags",
-                               "x-ot-span-context"}  // Headers for distributed tracing
+var trace_header = [...]string{"X-Request-Id",
+                               "X-B3-Traceid",
+                               "X-B3-Spanid",
+                               "X-B3-Parentspanid",
+                               "X-B3-Sampled",
+                               "X-B3-Flags",
+                               "X-Bt-Span-Context"}  // Headers for distributed tracing
 const SVC_TO_PORT = "8082"   // The port of the next service
 
 type ServiceChainHandler struct {   // the handler processing the requests for the local service
@@ -80,8 +80,10 @@ func (h *ServiceChainHandler) FindNextService() (host, port string, err error) {
 func PropTraceInfo(ih, oh *http.Header) error {  // Collect and progapate the headers from the incoming request to the outgoing request for tracing
     for _, h := range trace_header {
         if v, ok := (*ih)[h]; ok {
+            fmt.Println("Found an incomming header: ", h, "=", v[0])
             if v[0] != "" {
-                (*oh).Set(h, v[0])
+                (*oh).Add(h, v[0])
+                fmt.Println("Add a header: ", h, "=", v[0])
             }
         }
     }
@@ -89,7 +91,7 @@ func PropTraceInfo(ih, oh *http.Header) error {  // Collect and progapate the he
 }
 
 func (h *ServiceChainHandler) FollowChain() (resp *types.TestServiceResponse, err error) {  // Call the next service and get the response
-    in_header := h.Ctx.RequestData.Request.Header  // The headers of the incoming requests
+    in_header := h.Ctx.RequestData.Request.Header  // The headers of the incomming requests
     
     ho, p, err := h.FindNextService();
     if err != nil {

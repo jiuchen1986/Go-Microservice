@@ -22,6 +22,13 @@ func NewLocalServiceHandler(ctx *app.LocalServiceTestServiceContext) (h *LocalSe
 }
 
 func (h *LocalServiceHandler) Process() error {  // the main requests process of the handler
+    
+    req_header := h.Ctx.RequestData.Request.Header
+    fmt.Println("Get headers from the request: ")
+    for k, v := range req_header {
+        fmt.Printf("%s: %v\n", k, v)
+    }
+    
     cha := make([]*types.ServiceStatus, 1)
     var er error
     cha[0], er = GetLocalServiceStatus() 
