@@ -8,6 +8,7 @@ import (
     "net/http"
     "io/ioutil"
     "strconv"
+    "time"
     
     "github.com/jiuchen1986/Go-Microservice/app"
     "github.com/jiuchen1986/Go-Microservice/types"
@@ -31,7 +32,9 @@ func NewServiceChainHandler(ctx *app.ServiceChainTestServiceContext) (h *Service
     return &ServiceChainHandler{ctx}, nil
 }
 
-func (h *ServiceChainHandler) Process() error {  // the main requests process of the handler
+func (h *ServiceChainHandler) Process(delay time.Duration) error {  // the main requests process of the handler
+    time.Sleep(delay)
+    
     cha, er := GetLocalServiceStatus()
     if er != nil {
         h.Ctx.NotFound()

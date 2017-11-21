@@ -1,7 +1,9 @@
 package main
 
 import (
-	"github.com/jiuchen1986/Go-Microservice/app"
+	"time"
+    
+    "github.com/jiuchen1986/Go-Microservice/app"
     "github.com/jiuchen1986/Go-Microservice/handler"
 	"github.com/goadesign/goa"
 )
@@ -9,11 +11,12 @@ import (
 // TestServiceController implements the TestService resource.
 type TestServiceController struct {
 	*goa.Controller
+    Delay time.Duration
 }
 
 // NewTestServiceController creates a TestService controller.
-func NewTestServiceController(service *goa.Service) *TestServiceController {
-	return &TestServiceController{Controller: service.NewController("TestServiceController")}
+func NewTestServiceController(service *goa.Service, delay int64) *TestServiceController {
+	return &TestServiceController{Controller: service.NewController("TestServiceController"), Delay: time.Duration(delay)}
 }
 
 // LocalService runs the local_service action.
@@ -25,7 +28,7 @@ func (c *TestServiceController) LocalService(ctx *app.LocalServiceTestServiceCon
     if h, err := handler.NewHandler(ctx); err != nil {
         return err
     } else {
-        if e := h.Process(); e != nil {
+        if e := h.Process(c.Delay); e != nil {
             return e
         }
     }
@@ -43,7 +46,7 @@ func (c *TestServiceController) ServiceChain(ctx *app.ServiceChainTestServiceCon
     if h, err := handler.NewHandler(ctx); err != nil {
         return err
     } else {
-        if e := h.Process(); e != nil {
+        if e := h.Process(c.Delay); e != nil {
             return e
         }
     }

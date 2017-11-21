@@ -7,6 +7,7 @@ import (
     "os"
     "errors"
     "strings"
+    "time"
     
     "github.com/jiuchen1986/Go-Microservice/app"
     "github.com/jiuchen1986/Go-Microservice/types"
@@ -21,7 +22,8 @@ func NewLocalServiceHandler(ctx *app.LocalServiceTestServiceContext) (h *LocalSe
     return &LocalServiceHandler{ctx}, nil
 }
 
-func (h *LocalServiceHandler) Process() error {  // the main requests process of the handler
+func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main requests process of the handler
+    time.Sleep(delay)
     
     req_header := h.Ctx.RequestData.Request.Header
     fmt.Println("Get headers from the request: ")

@@ -4,6 +4,7 @@ package handler
 
 import (
     "errors"
+    "time"
     
     "github.com/jiuchen1986/Go-Microservice/app"
 )
@@ -14,7 +15,7 @@ type ITestServiceContext interface {   // an interface for the contexts defined 
 }
 
 type IHandler interface {  // the base handler interface for the handlers processing requests for the test services
-    Process() error  // starting the processes in the handler
+    Process(delay time.Duration) error  // starting the processes in the handler
 }
 
 func NewHandler(ctx ITestServiceContext) (ih IHandler, err error) {  // return a handler instance according to the type of the context
