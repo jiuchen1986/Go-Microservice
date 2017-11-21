@@ -8,9 +8,9 @@ import (
     "errors"
     "strings"
     
-    "app"
-    "types"
-    "utils"
+    "github.com/jiuchen1986/Go-Microservice/app"
+    "github.com/jiuchen1986/Go-Microservice/types"
+    "github.com/jiuchen1986/Go-Microservice/utils"
 )
 
 type LocalServiceHandler struct {   // the handler processing the requests for the local service

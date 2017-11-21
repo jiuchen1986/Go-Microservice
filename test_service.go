@@ -1,8 +1,8 @@
 package main
 
 import (
-	"app"
-    "handler"
+	"github.com/jiuchen1986/Go-Microservice/app"
+    "github.com/jiuchen1986/Go-Microservice/handler"
 	"github.com/goadesign/goa"
 )
 

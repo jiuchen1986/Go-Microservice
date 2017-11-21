@@ -9,9 +9,9 @@ import (
     "io/ioutil"
     "strconv"
     
-    "app"
-    "types"
-    "utils"
+    "github.com/jiuchen1986/Go-Microservice/app"
+    "github.com/jiuchen1986/Go-Microservice/types"
+    "github.com/jiuchen1986/Go-Microservice/utils"
 )
 
 var trace_header = [...]string{"X-Request-Id",

@@ -3,7 +3,7 @@
 package main
 
 import (
-    "app"
+    "github.com/jiuchen1986/Go-Microservice/app"
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware"
 )

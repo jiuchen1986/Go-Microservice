@@ -11,7 +11,7 @@
 package cli
 
 import (
-	"client"
+	"github.com/jiuchen1986/Go-Microservice/client"
 	"context"
 	"encoding/json"
 	"fmt"
