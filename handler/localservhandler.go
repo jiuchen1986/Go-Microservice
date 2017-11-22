@@ -8,6 +8,8 @@ import (
     "errors"
     "strings"
     "time"
+    "strconv"
+    "math/rand"
 
     "app"
     "types"
@@ -26,25 +28,33 @@ func NewLocalServiceHandler(ctx *app.LocalServiceTestServiceContext) (h *LocalSe
 }
 
 func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main requests process of the handler
-    fmt.Println("Delay for ", delay)
+    fmt.Println("handler.localservhandler: Delay for ", delay)
     time.Sleep(delay)
     
+    
+    /*
     req_header := h.Ctx.RequestData.Request.Header
-    fmt.Println("Get headers from the request: ")
+    fmt.Println("handler.localservhandler: Get headers from the request: ")
     for k, v := range req_header {
         fmt.Printf("%s: %v\n", k, v)
     }
+    */
     
-    cha := make([]*types.ServiceStatus, 1)
+    sub_chains_resp := make([]*types.ServiceChain, 0)
+    chain_resp := make([]*types.ServiceStatus, 1)
     var er error
-    cha[0], er = GetLocalServiceStatus() 
+    chain_resp[0], er = GetLocalServiceStatus() 
     if er != nil {
         h.Ctx.NotFound()
         return er
-    }    
-    resp := &types.TestServiceResponse{"1", cha}
+    }
+    rand.Seed(315)    
+    resp := &types.TestServiceResponse{&types.ServiceChain{chain_resp[0].ServName, 
+                                                           strconv.Itoa(rand.Int()),
+                                                           chain_resp,  
+                                                           "1"}, sub_chains_resp}
     
-    if strings.Compare(h.Ctx.SvcLo, resp.Chain[0].ServName) != 0 {
+    if strings.Compare(h.Ctx.SvcLo, resp.MainChain.Starter) != 0 {
         return h.Ctx.NotFound()
     } else {
         resp_b, err := types.RespEncode(resp)
@@ -53,8 +63,8 @@ func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main 
             return err
         } else {
             
-            fmt.Printf("Send a response with OK!\n")
-            fmt.Printf("Response body: \n")
+            fmt.Printf("handler.localservhandler: Send a response with OK!\n")
+            fmt.Printf("handler.localservhandler: Response body: \n")
             fmt.Println(utils.Convert(resp_b))
             
             return h.Ctx.OK(resp_b)
