@@ -173,14 +173,14 @@ func (h *ServiceChainHandler) FindNextServiceMain() (url string, err error) {  /
                                                                                // in the main chain
     svcTo := strings.Split(strings.Split(h.Ctx.SvcOther, "/")[0], "_")[0]
     fmt.Println("handler.servchainhandler: The next service in the main chain: ", svcTo)
-    /*
+    
     return strings.Join([]string{"http:/", 
                                  strings.Join([]string{svcTo, "8082"}, ":"), 
                                  "api", 
                                  h.Ctx.SvcOther}, "/"), nil
-    */
     
-    return "http://10.0.2.15:8082/api/" + h.Ctx.SvcOther, nil
+    
+    // return "http://10.0.2.15:8082/api/" + h.Ctx.SvcOther, nil
 }
 
 func (h *ServiceChainHandler) FindNextServiceSub() (url string, err error) {  // Return the url for the next service 
@@ -190,14 +190,14 @@ func (h *ServiceChainHandler) FindNextServiceSub() (url string, err error) {  //
         return "", nil
     }
     fmt.Println("handler.servchainhandler: The next service in the sub chain: ", sub_chain[1])
-    /*
+    
     return strings.Join([]string{"http:/", 
                                  strings.Join([]string{sub_chain[1], "8082"}, ":"), 
                                  "api", 
                                  strings.Join(sub_chain[1:], "/")}, "/"), nil
-    */
     
-    return "http://10.0.2.15:8082/api/" + strings.Join(sub_chain[1:], "/"), nil
+    
+    // return "http://10.0.2.15:8082/api/" + strings.Join(sub_chain[1:], "/"), nil
 }
 
 func PropTraceInfo(ih, oh *http.Header) error {  // Collect and progapate the headers from the incomming request to the outgoing request for tracing
