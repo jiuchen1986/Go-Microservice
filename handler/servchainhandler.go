@@ -177,7 +177,7 @@ func (h *ServiceChainHandler) FindNextServiceMain() (url string, err error) {  /
     return strings.Join([]string{"http:/", 
                                  strings.Join([]string{svcTo, "8082"}, ":"), 
                                  "api", 
-                                 h.Ctx.SvcOther}, "/"), nil
+                                 h.Ctx.SvcOther}, "/") + "/", nil
     
     
     // return "http://10.0.2.15:8082/api/" + h.Ctx.SvcOther, nil
@@ -194,7 +194,7 @@ func (h *ServiceChainHandler) FindNextServiceSub() (url string, err error) {  //
     return strings.Join([]string{"http:/", 
                                  strings.Join([]string{sub_chain[1], "8082"}, ":"), 
                                  "api", 
-                                 strings.Join(sub_chain[1:], "/")}, "/"), nil
+                                 strings.Join(sub_chain[1:], "/")}, "/") + "/", nil
     
     
     // return "http://10.0.2.15:8082/api/" + strings.Join(sub_chain[1:], "/"), nil
