@@ -1,13 +1,13 @@
 ##################################################################################################
-# service C
+# service F
 ##################################################################################################
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: svc-c
+  name: svc-f
   labels:
-    app: svc-c
+    app: svc-f
 spec:
   ports:
   - port: 8082
@@ -17,29 +17,29 @@ spec:
 #    nodePort: 32000
 #  type: NodePort
   selector:
-    app: svc-c
+    app: svc-f
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: svc-c
+  name: svc-f
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: svc-c
+        app: svc-f
         version: v1
     spec:
       containers:
-      - name: svc-c
+      - name: svc-f
         image: jiuchen1986/go-micro-service
         imagePullPolicy: Always
         ports:
         - containerPort: 8082
         env:
         - name: TEST_SERVICE_NAME
-          value: svc-c
+          value: svc-f
         - name: TEST_SERVICE_VERSION
           value: v1              
 ---

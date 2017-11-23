@@ -1,0 +1,92 @@
+##################################################################################################
+# service E
+##################################################################################################
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-e
+  labels:
+    app: svc-e
+spec:
+  ports:
+  - port: 8082
+    protocol: TCP
+    targetPort: 8082
+    name: http
+#    nodePort: 32000
+#  type: NodePort
+  selector:
+    app: svc-e
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: svc-e-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: svc-e
+        version: v1
+    spec:
+      containers:
+      - name: svc-e-v1
+        image: jiuchen1986/go-micro-service
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8082
+        env:
+        - name: TEST_SERVICE_NAME
+          value: svc-e
+        - name: TEST_SERVICE_VERSION
+          value: v1              
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: svc-e-v2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: svc-e
+        version: v2
+    spec:
+      containers:
+      - name: svc-e-v2
+        image: jiuchen1986/go-micro-service
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8082
+        env:
+        - name: TEST_SERVICE_NAME
+          value: svc-e
+        - name: TEST_SERVICE_VERSION
+          value: v2
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: svc-e-v3
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: svc-e
+        version: v3
+    spec:
+      containers:
+      - name: svc-e-v3
+        image: jiuchen1986/go-micro-service
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8082
+        env:
+        - name: TEST_SERVICE_NAME
+          value: svc-e
+        - name: TEST_SERVICE_VERSION
+          value: v3
