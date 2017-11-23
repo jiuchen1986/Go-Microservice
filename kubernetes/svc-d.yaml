@@ -1,0 +1,45 @@
+##################################################################################################
+# service D
+##################################################################################################
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-d
+  labels:
+    app: svc-d
+spec:
+  ports:
+  - port: 8082
+    protocol: TCP
+    targetPort: 8082
+    name: http
+#    nodePort: 32000
+#  type: NodePort
+  selector:
+    app: svc-d
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: svc-d
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: svc-d
+        version: v1
+    spec:
+      containers:
+      - name: svc-d
+        image: jiuchen1986/go-micro-service
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8082
+        env:
+        - name: TEST_SERVICE_NAME
+          value: svc-d
+        - name: TEST_SERVICE_VERSION
+          value: v1              
+---

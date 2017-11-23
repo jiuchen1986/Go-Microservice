@@ -3,10 +3,9 @@
 package types
 
 import (
-    "errors"
+//    "errors"
     "encoding/json"
     "fmt"
-    "strconv"
 
     "utils"    
 //    "github.com/jiuchen1986/Go-Microservice/utils"    
@@ -19,54 +18,62 @@ type ServiceStatus struct {  // The service status of the local service
     Version string `json:"version"`  // The version of the local service
 }
 
+type ServiceChain struct {  // A service chain
+     Starter string `json:"starter"`  // The name of the starting service of this chain
+     ChainId string `json:"id"` // A chain id unique in a service
+     Chain []*ServiceStatus `json:"chain"` // The status of the services from the local service to the end of the service chain
+     Len string `json:"length"`  // The length of the test services from the local service to the end of the service chain
+}
+
 type TestServiceResponse struct {   // The response body structure used between test services
-    Len string `json:"length"`  // The length of the test services from the local service to the end of the service chain
-    Chain []*ServiceStatus `json:"chain"` // The status of the services from the local service to the end of the service chain
+    MainChain *ServiceChain `json:"main_chain"`  // The main chain
+    SubChains []*ServiceChain `json:"sub_chains"` // The sub chains involved in this call
 }
 
 func RespEncode(r *TestServiceResponse) (b []byte, err error) {  // Encode a response structure to a response body
     return json.Marshal(r)
 }
 
-func RespDecode(b []byte) (r *TestServiceResponse, err error) {  // Decode a response body to a response structure
-    /*
-    var dat map[string]interface{}
-    
-    if err := json.Unmarshal(b, &dat); err != nil {
-        return nil, err
-    }
-    
-    l = dat["length"].(int)
-    c = dat["chain"].([]interface{})
-    cha := make([]*ServiceStatus, len(c))
-    for i, s := range c {
-        if st, ok := s.(ServiceStatus); ok {
-            cha[i] = &st
-        }
-    }
-    
-    return &TestServiceResponse{l, cha}, nil
-    */
-    
+func RespDecode(b []byte) (r *TestServiceResponse, err error) {  // Decode a response body to a response structure    
     json_str := utils.Convert(b)
-    fmt.Println("Get a response: ", json_str)
-    l := gjson.Get(json_str, "length").String()    
-    cha_r := gjson.Get(json_str, "chain").Array()
+    // fmt.Println("response.RespDecode: Get a response: ", json_str)    
     
-    l_int , err := strconv.Atoi(l)
-    if err != nil {
-        return nil, err
-    }
-    if l_int != len(cha_r) {
-       return nil, errors.New("The length of the service chain is not matched!")
-    }
-    
-    cha := make([]*ServiceStatus, len(cha_r))
-    for i, st_r := range cha_r {
-        cha[i] = &ServiceStatus{gjson.Get(st_r.String(), "order").String(), 
-                                gjson.Get(st_r.String(), "service").String(), 
-                                gjson.Get(st_r.String(), "version").String()}
+    main_chain_gjson_str := gjson.Get(json_str, "main_chain").String()
+    main_chain_resp := &ServiceChain{gjson.Get(main_chain_gjson_str, "starter").String(), 
+                                     gjson.Get(main_chain_gjson_str, "id").String(), 
+                                     make([]*ServiceStatus, 0), 
+                                     gjson.Get(main_chain_gjson_str, "length").String()}
+    var status_gjson_str string                                     
+    for _, st_gjson := range gjson.Get(main_chain_gjson_str, "chain").Array() {
+        status_gjson_str = st_gjson.String()
+        main_chain_resp.Chain = append(main_chain_resp.Chain, &ServiceStatus{gjson.Get(status_gjson_str, "order").String(), 
+                                                                             gjson.Get(status_gjson_str, "service").String(), 
+                                                                             gjson.Get(status_gjson_str, "version").String()}) 
     }
     
-    return &TestServiceResponse{l, cha}, nil   
+    sub_chains_gjson := gjson.Get(json_str, "sub_chains").Array()
+    sub_chains_resp := make([]*ServiceChain, 0)
+    
+    // temp var for the chains loop
+    var chain_resp []*ServiceStatus
+    var chain_gjson_str string   
+    
+    for _, chain_gjson := range sub_chains_gjson {
+        chain_gjson_str = chain_gjson.String()        
+        chain_resp = make([]*ServiceStatus, 0)
+        
+        for _, status_gjson := range gjson.Get(chain_gjson_str, "chain").Array() {
+            status_gjson_str = status_gjson.String()
+            chain_resp = append(chain_resp, &ServiceStatus{gjson.Get(status_gjson_str, "order").String(), 
+                                              gjson.Get(status_gjson_str, "service").String(), 
+                                              gjson.Get(status_gjson_str, "version").String()})
+        }
+        sub_chains_resp = append(sub_chains_resp, &ServiceChain{gjson.Get(chain_gjson_str, "starter").String(), 
+                                          gjson.Get(chain_gjson_str, "id").String(), 
+                                          chain_resp,  
+                                          gjson.Get(chain_gjson_str, "length").String()})
+    }
+    
+    fmt.Println("response.RespDecode: Successfully decode the response: ", json_str)
+    return &TestServiceResponse{main_chain_resp, sub_chains_resp}, nil   
 }

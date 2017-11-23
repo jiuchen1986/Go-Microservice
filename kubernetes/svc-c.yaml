@@ -29,7 +29,7 @@ spec:
     metadata:
       labels:
         app: svc-c
-        version: v2
+        version: v1
     spec:
       containers:
       - name: svc-c
@@ -41,5 +41,5 @@ spec:
         - name: TEST_SERVICE_NAME
           value: svc-c
         - name: TEST_SERVICE_VERSION
-          value: v2              
+          value: v1              
 ---
