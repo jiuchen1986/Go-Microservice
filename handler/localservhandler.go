@@ -8,6 +8,7 @@ import (
     "errors"
     "strings"
     "time"
+    "encoding/json"
 //    "strconv"
 //    "math/rand"
 
@@ -31,7 +32,8 @@ func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main 
     fmt.Println("handler.localservhandler: Delay for ", delay)
     time.Sleep(delay)
     
-    return h.Ctx.OK(make([]byte, 3))
+    resp_b, _ := json.Marshal("{}")
+    return h.Ctx.OK(resp_b)
     
     /*
     req_header := h.Ctx.RequestData.Request.Header
