@@ -6,6 +6,7 @@ import (
     "fmt"
     "strings"
     "net/http"
+    "encoding/json"
 //    "io/ioutil"
 //    "strconv"
     "time"
@@ -61,7 +62,8 @@ func (h *ServiceChainHandler) Process(delay time.Duration) error {  // the main 
     <-ch_resp[0]
     <-ch_resp[1]
     
-    return h.Ctx.OK(make([]byte, 3))
+    resp_b, _ := json.Marshal("{}")
+    return h.Ctx.OK(resp_b)
     
     /*
     if main_resp == nil {
