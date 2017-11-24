@@ -31,6 +31,7 @@ func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main 
     fmt.Println("handler.localservhandler: Delay for ", delay)
     time.Sleep(delay)
     
+    return h.Ctx.OK([]byte)
     
     /*
     req_header := h.Ctx.RequestData.Request.Header
@@ -38,7 +39,6 @@ func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main 
     for k, v := range req_header {
         fmt.Printf("%s: %v\n", k, v)
     }
-    */
     
     sub_chains_resp := make([]*types.ServiceChain, 0)
     chain_resp := make([]*types.ServiceStatus, 1)
@@ -70,6 +70,7 @@ func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main 
             return h.Ctx.OK(resp_b)
         }
     }
+    */
     return nil    
 }
 
