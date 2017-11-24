@@ -6,14 +6,14 @@ import (
     "fmt"
     "strings"
     "net/http"
-    "io/ioutil"
-    "strconv"
+//    "io/ioutil"
+//    "strconv"
     "time"
-    "math/rand"
+//    "math/rand"
     
     "app"
     "types"
-    "utils"
+//    "utils"
 //    "github.com/jiuchen1986/Go-Microservice/app"
 //    "github.com/jiuchen1986/Go-Microservice/types"
 //    "github.com/jiuchen1986/Go-Microservice/utils"
@@ -50,16 +50,18 @@ func (h *ServiceChainHandler) Process(delay time.Duration) error {  // the main 
         return h.Ctx.NotFound()
     }
     
-    var main_resp, sub_resp *types.TestServiceResponse
+    // var main_resp, sub_resp *types.TestServiceResponse
     ch_resp := make([]chan *types.TestServiceResponse, 2)
     
     ch_resp[0] = make(chan *types.TestServiceResponse)
     go h.FollowMainChain(ch_resp[0])
     ch_resp[1] = make(chan *types.TestServiceResponse)
     go h.FollowSubChain(ch_resp[1])
-    main_resp, sub_resp = <-ch_resp[0], <-ch_resp[1]
+    // main_resp, sub_resp = <-ch_resp[0], <-ch_resp[1]
+    <-ch_resp[0]
+    <-ch_resp[1]
     
-    return h.Ctx.OK([]byte)
+    return h.Ctx.OK(make([]byte, 3))
     
     /*
     if main_resp == nil {
