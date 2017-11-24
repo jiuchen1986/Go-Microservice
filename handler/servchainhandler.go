@@ -62,6 +62,10 @@ func (h *ServiceChainHandler) Process(delay time.Duration) error {  // the main 
     <-ch_resp[0]
     <-ch_resp[1]
     
+    for _, ch := range ch_resp {
+        close(ch)
+    }
+    
     resp_b, _ := json.Marshal("{}")
     return h.Ctx.OK(resp_b)
     

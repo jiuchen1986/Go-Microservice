@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: svc-f
-        image: jiuchen1986/go-micro-service
+        image: jiuchen1986/go-micro-service:4.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8082
