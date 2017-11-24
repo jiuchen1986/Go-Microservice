@@ -8,12 +8,12 @@ import (
     "errors"
     "strings"
     "time"
-    "strconv"
-    "math/rand"
+//    "strconv"
+//    "math/rand"
 
     "app"
     "types"
-    "utils"    
+//    "utils"    
 //    "github.com/jiuchen1986/Go-Microservice/app"
 //    "github.com/jiuchen1986/Go-Microservice/types"
 //    "github.com/jiuchen1986/Go-Microservice/utils"
@@ -31,7 +31,7 @@ func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main 
     fmt.Println("handler.localservhandler: Delay for ", delay)
     time.Sleep(delay)
     
-    return h.Ctx.OK([]byte)
+    return h.Ctx.OK(make([]byte, 3))
     
     /*
     req_header := h.Ctx.RequestData.Request.Header
