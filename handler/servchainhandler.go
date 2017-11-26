@@ -41,6 +41,7 @@ func (h *ServiceChainHandler) Process(delay time.Duration) error {  // the main 
     fmt.Println("handler.servchainhandler: Delay for ", delay)
     time.Sleep(delay)
     
+    /*
     v, er := h.VerifyPath()
     if er != nil {
         h.Ctx.NotFound()
@@ -50,22 +51,23 @@ func (h *ServiceChainHandler) Process(delay time.Duration) error {  // the main 
         fmt.Println("handler.servchainhandler: Invailid incomming path")
         return h.Ctx.NotFound()
     }
+    */
     
     // var main_resp, sub_resp *types.TestServiceResponse
-    ch_resp := make([]chan *types.TestServiceResponse, 2)
+    // ch_resp := make([]chan *types.TestServiceResponse, 2)
     
-    ch_resp[0] = make(chan *types.TestServiceResponse)
-    go h.FollowMainChain(ch_resp[0])
-    ch_resp[1] = make(chan *types.TestServiceResponse)
-    go h.FollowSubChain(ch_resp[1])
+    // ch_resp[0] = make(chan *types.TestServiceResponse)
+    // go h.FollowMainChain(ch_resp[0])
+    // ch_resp[1] = make(chan *types.TestServiceResponse)
+    // go h.FollowSubChain(ch_resp[1])
     // main_resp, sub_resp = <-ch_resp[0], <-ch_resp[1]
-    <-ch_resp[0]
-    <-ch_resp[1]
-    
+    // <-ch_resp[0]
+    // <-ch_resp[1]
+    /*
     for _, ch := range ch_resp {
         close(ch)
     }
-    
+    */
     resp_b, _ := json.Marshal("{}")
     return h.Ctx.OK(resp_b)
     
