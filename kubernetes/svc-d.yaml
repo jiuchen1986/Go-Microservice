@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: svc-d
-        image: jiuchen1986/go-micro-service:5.0
+        image: jiuchen1986/go-micro-service:simple
         imagePullPolicy: Always
         ports:
         - containerPort: 8082
