@@ -6,15 +6,15 @@ import (
     "fmt"
     "strings"
     "net/http"
-    "encoding/json"
-//    "io/ioutil"
-//    "strconv"
+//    "encoding/json"
+    "io/ioutil"
+    "strconv"
     "time"
-//    "math/rand"
+    "math/rand"
     
     "app"
     "types"
-//    "utils"
+    "utils"
 //    "github.com/jiuchen1986/Go-Microservice/app"
 //    "github.com/jiuchen1986/Go-Microservice/types"
 //    "github.com/jiuchen1986/Go-Microservice/utils"
@@ -51,21 +51,25 @@ func (h *ServiceChainHandler) Process(delay time.Duration) error {  // the main 
         return h.Ctx.NotFound()
     }
     
-    // var main_resp, sub_resp *types.TestServiceResponse
+    var main_resp, sub_resp *types.TestServiceResponse
     ch_resp := make([]chan *types.TestServiceResponse, 2)
     
     ch_resp[0] = make(chan *types.TestServiceResponse)
     go h.FollowMainChain(ch_resp[0])
     ch_resp[1] = make(chan *types.TestServiceResponse)
     go h.FollowSubChain(ch_resp[1])
-    // main_resp, sub_resp = <-ch_resp[0], <-ch_resp[1]
-    <-ch_resp[0]
-    <-ch_resp[1]
+    main_resp, sub_resp = <-ch_resp[0], <-ch_resp[1]
+    // <-ch_resp[0]
+    // <-ch_resp[1]
     
-    resp_b, _ := json.Marshal("{}")
-    return h.Ctx.OK(resp_b)
+    for _, ch := range ch_resp {
+        close(ch)
+    }
     
-    /*
+    // resp_b, _ := json.Marshal("{}")
+    // return h.Ctx.OK(resp_b)
+    
+    
     if main_resp == nil {
         fmt.Println("handler.servchainhandler: No main response")
         return h.Ctx.NotFound()
@@ -161,7 +165,7 @@ func (h *ServiceChainHandler) Process(delay time.Duration) error {  // the main 
             
         return h.Ctx.OK(resp_b)
     }
-    */
+    
 
     return nil    
 }
@@ -249,7 +253,7 @@ func (h *ServiceChainHandler) FollowMainChain(ch chan *types.TestServiceResponse
     }
     defer http_resp.Body.Close()
     
-    /*
+    
     resp_body, err := ioutil.ReadAll(http_resp.Body)
     if err != nil {
         return err
@@ -261,7 +265,7 @@ func (h *ServiceChainHandler) FollowMainChain(ch chan *types.TestServiceResponse
     }
     resp_b, _ := types.RespEncode(resp)
     fmt.Printf("handler.servchainhandler: get the main response: %s\n", utils.Convert(resp_b))
-    */
+    
     return nil    
 }
 
@@ -296,7 +300,7 @@ func (h *ServiceChainHandler) FollowSubChain(ch chan *types.TestServiceResponse)
     }
     defer http_resp.Body.Close()
     
-    /*
+    
     resp_body, err := ioutil.ReadAll(http_resp.Body)
     if err != nil {
         return err
@@ -308,6 +312,6 @@ func (h *ServiceChainHandler) FollowSubChain(ch chan *types.TestServiceResponse)
     }
     resp_b, _ := types.RespEncode(resp)
     fmt.Printf("handler.servchainhandler: get the sub response: %s\n", utils.Convert(resp_b))
-    */
+    
     return nil    
 }

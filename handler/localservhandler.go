@@ -8,13 +8,13 @@ import (
     "errors"
     "strings"
     "time"
-    "encoding/json"
-//    "strconv"
-//    "math/rand"
+//    "encoding/json"
+    "strconv"
+    "math/rand"
 
     "app"
     "types"
-//    "utils"    
+    "utils"    
 //    "github.com/jiuchen1986/Go-Microservice/app"
 //    "github.com/jiuchen1986/Go-Microservice/types"
 //    "github.com/jiuchen1986/Go-Microservice/utils"
@@ -32,10 +32,10 @@ func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main 
     fmt.Println("handler.localservhandler: Delay for ", delay)
     time.Sleep(delay)
     
-    resp_b, _ := json.Marshal("{}")
-    return h.Ctx.OK(resp_b)
+    // resp_b, _ := json.Marshal("{}")
+    // return h.Ctx.OK(resp_b)
     
-    /*
+    
     req_header := h.Ctx.RequestData.Request.Header
     fmt.Println("handler.localservhandler: Get headers from the request: ")
     for k, v := range req_header {
@@ -72,7 +72,7 @@ func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main 
             return h.Ctx.OK(resp_b)
         }
     }
-    */
+    
     return nil    
 }
 
