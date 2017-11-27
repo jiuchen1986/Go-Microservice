@@ -71,8 +71,32 @@ func (h *ServiceChainHandler) Process(delay time.Duration) error {  // the main 
     
     
     if main_resp == nil {
-        fmt.Println("handler.servchainhandler: No main response")
-        return h.Ctx.NotFound()
+        fmt.Println("handler.servchainhandler: Missing main response")
+        // this will still response even when the main chain is missing
+        local_sub_chains_resp := make([]*types.ServiceChain, 0)
+        local_chain_resp := make([]*types.ServiceStatus, 1)
+        local_chain_resp[0], er = GetLocalServiceStatus() 
+        if er != nil {
+            h.Ctx.NotFound()
+            return er
+        }
+        rand.Seed(315)    
+        resp := &types.TestServiceResponse{&types.ServiceChain{local_chain_resp[0].ServName, 
+                                                               strconv.Itoa(rand.Int()),
+                                                               local_chain_resp,  
+                                                               "1"}, local_sub_chains_resp}
+        resp_b, er := types.RespEncode(resp)
+        if er != nil {
+            h.Ctx.NotFound()
+            return er
+        } else {
+            
+            fmt.Printf("handler.servchainhandler: Send a response with OK!\n")
+            fmt.Printf("handler.servchainhandler: Response body: \n")
+            fmt.Println(utils.Convert(resp_b))
+            
+            return h.Ctx.OK(resp_b)
+        }
     }
     
     // resp_b, _ := types.RespEncode(main_resp)

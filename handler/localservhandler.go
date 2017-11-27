@@ -36,11 +36,13 @@ func (h *LocalServiceHandler) Process(delay time.Duration) error {  // the main 
     // return h.Ctx.OK(resp_b)
     
     
+    /*
     req_header := h.Ctx.RequestData.Request.Header
     fmt.Println("handler.localservhandler: Get headers from the request: ")
     for k, v := range req_header {
         fmt.Printf("%s: %v\n", k, v)
     }
+    */
     
     sub_chains_resp := make([]*types.ServiceChain, 0)
     chain_resp := make([]*types.ServiceStatus, 1)

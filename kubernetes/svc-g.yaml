@@ -1,0 +1,45 @@
+##################################################################################################
+# service F
+##################################################################################################
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-g
+  labels:
+    app: svc-g
+spec:
+  ports:
+  - port: 8082
+    protocol: TCP
+    targetPort: 8082
+    name: http
+#    nodePort: 32000
+#  type: NodePort
+  selector:
+    app: svc-g
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: svc-g
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: svc-g
+        version: v1
+    spec:
+      containers:
+      - name: svc-g
+        image: jiuchen1986/go-micro-service:full
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8082
+        env:
+        - name: TEST_SERVICE_NAME
+          value: svc-g
+        - name: TEST_SERVICE_VERSION
+          value: v1              
+---

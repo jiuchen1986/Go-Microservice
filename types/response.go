@@ -6,6 +6,7 @@ import (
 //    "errors"
     "encoding/json"
     "fmt"
+    "strings"
 
     "utils"    
 //    "github.com/jiuchen1986/Go-Microservice/utils"    
@@ -36,7 +37,10 @@ func RespEncode(r *TestServiceResponse) (b []byte, err error) {  // Encode a res
 
 func RespDecode(b []byte) (r *TestServiceResponse, err error) {  // Decode a response body to a response structure    
     json_str := utils.Convert(b)
-    // fmt.Println("response.RespDecode: Get a response: ", json_str)    
+    // fmt.Println("response.RespDecode: Get a response: ", json_str)
+    if strings.Compare(json_str, "{}") == 0 {        
+        return nil, nil
+    }    
     
     main_chain_gjson_str := gjson.Get(json_str, "main_chain").String()
     main_chain_resp := &ServiceChain{gjson.Get(main_chain_gjson_str, "starter").String(), 
